@@ -1,1 +1,1 @@
-# simple crosspost telegram poster based on yii
+simple telegram crossposter based on yii
