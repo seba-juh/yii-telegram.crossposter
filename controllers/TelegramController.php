@@ -50,16 +50,28 @@ class TelegramController extends CustomController
 	}
 	private function checkMessage($post){
 		$message = $post["message"]["text"];
-		foreach($message as $key=>$char){
-			if($char == "/" || $char =="&"){
+		for($i = 0;$i<strlen($message);$i++){
+			if($message[$i] == "/" || $message[$i] =="&"){
 				$message="";
 				break;
 			}
-			elseif($char == " "){
-				$message[$key]="_";
+			elseif($message[$i] == " "){
+				$message[$i]="_";
 			}
 		}
 		return $message;
+	}
+	public function cutMessage($content){
+		$temp_content = "";
+		for($i = 0;$i<strlen($content);$i++){
+			if($content[$i] == "=" && $content[$i+1] =="="){
+				break;
+			}
+			else{
+				$temp_content.=$content[$i];
+			}
+		}
+		return $temp_content;
 	}
 	public function actionGetMessages()
 	{
@@ -70,11 +82,11 @@ class TelegramController extends CustomController
 			if($post["message"]["text"]=="/start") {
 				$bot->sendMessage($post["message"]["chat"]["id"], "Hello, welcome to wiki bot, send me what you want to know. Send it in english please!");
 			} else {
-				$content = $this->getContent($this->findInWiki("Dog"));
-				if($this->checkMessage($post["message"])==""){
+				if($this->checkMessage($post)==""){
 					$bot->sendMessage($post["message"]["chat"]["id"], "Wrong text, sorry");
 				} else {
-					$bot->sendMessage($post["message"]["chat"]["id"], $content);
+					$content = $this->getContent($this->findInWiki($this->checkMessage($post)));
+					$bot->sendMessage($post["message"]["chat"]["id"], $this->cutMessage($content));
 				}
 			}
 		} else {
