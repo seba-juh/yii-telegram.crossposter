@@ -18,7 +18,7 @@ class TelegramController extends CustomController
 {
 	public $modelClass = 'app\models\User';
 	public $enableCsrfValidation = false;
-	public $token = "973605780:AAEUuSr2fcnapRvAtHjoiRKjbNyFnrZx5Ek";
+	public $token = "{{Token}}";
 	public function behaviors()
 	{
 		return [
